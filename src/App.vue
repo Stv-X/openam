@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LaunchScreen from './components/LaunchScreen.vue'
+import LaunchScreen from './view/LaunchScreen.vue'
 </script>
 
 <template>
