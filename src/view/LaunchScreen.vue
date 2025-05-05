@@ -1,60 +1,24 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import {onMounted} from 'vue'
 
-const isAuthorized = ref(false)
-const isAuthorizing = ref(false)
-const username = ref('')
-var music
 
-onMounted(() => {
-  document.addEventListener('musickitloaded', async function () {
-    const MusicKit = window.MusicKit
-    await MusicKit.configure({
-      developerToken: 'eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlM1RkRKN1pGRzcifQ.eyJpYXQiOjE3NDY0MDQ5MDEsImV4cCI6MTc2MTk1NjkwMSwiaXNzIjoiOEdZWFRDU1pQWiJ9.WVN7EsvzkvOXNInvZjqFGeWQsyT1iCivSIMLIOhmKk_gJ9c_QyC1SsYITxLrxnMxxjMBaBOdA0vhOm5NhZkOCg',
-      app: {
-        name: 'OpenAM',
-        build: '0.1.0'
-      }
-    })
-    music = MusicKit.getInstance()
-    isAuthorized.value = music.isAuthorized
-  })
-})
+import {useMusicKit} from "../components/useMusicKit.ts";
 
-const login = async () => {
-  isAuthorizing.value = true
-  if (music) {
-    try {
-      await music.authorize();
-    } catch (error) {
-      console.error('Authorization error:', error);
-    }
-    isAuthorized.value = music.isAuthorized
-  }
-  isAuthorizing.value = false
-}
-const logout = async () => {
-  if (music) {
-    try {
-      await music.unauthorize()
-    } catch (error) {
-      console.error('Logout error:', error)
-    }
-    isAuthorized.value = music.isAuthorized
-  }
-}
+const {
+  music,
+  isAuthorized,
+  isAuthorizing,
+  login,
+  logout,
+} = useMusicKit()
 </script>
 
 <template>
   <img src="../assets/OpenAMIcon.png" class="app-icon"/>
   <h2>Welcome to OpenAM</h2>
+
   <div v-if="!isAuthorized">
     <button @click="login" type="button" class="sign-in-button" :disabled="isAuthorizing"
-            :style="{
-                backgroundColor: isAuthorizing ? '#666' : 'red',
-                position: 'relative'
-            }">
+            :style="{ backgroundColor: isAuthorizing ? '#666' : 'red', position: 'relative' }">
       <div v-if="isAuthorizing" class="progress-overlay"></div>
       <svg viewBox="0 0 10 11" style="fill: white; width: 13pt; margin: 4pt;">
         <path
@@ -62,12 +26,12 @@ const logout = async () => {
         </path>
       </svg>
       <span style="color: white; font-size: 13pt;">
-                {{ isAuthorizing ? '登录中...' : '登录' }}
-            </span>
+        {{ isAuthorizing ? '登录中...' : '登录' }}
+      </span>
     </button>
   </div>
-  <div v-else>
 
+  <div v-else>
     <button @click="logout" type="button">
       <span style="font-size: 13pt;">退出</span>
     </button>
@@ -75,7 +39,7 @@ const logout = async () => {
 </template>
 
 <style>
-
+/* 样式保持不变 */
 .app-icon {
   mask-image: url('../assets/AppIconMask.svg');
   mask-repeat: no-repeat;
