@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [vue({
     template: {
       compilerOptions: {
-        isCustomElement: tag => ['apple-music-playback-controls', 'apple-music-progress', 'apple-music-artwork', 'apple-music-volume'].includes(tag)
+        isCustomElement: tag => ['apple-music-playback-controls', 'apple-music-progress', 'apple-music-artwork', 'apple-music-volume', 'apple-music-artwork-lockup'].includes(tag)
       }
     }
   })],
